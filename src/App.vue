@@ -16,7 +16,7 @@
         @click="run(index)"
       >
         <td>{{ index + 1 }}</td>
-        <td class="title">{{ item  | title }}</td>
+        <td class="title">{{ title(item) }}</td>
       </tr>
     </table>
     <div class="shadow"></div>
@@ -26,7 +26,7 @@
       max="100"
       :value="progress"
     ></progress>
-    <h4 class="info">{{ music[current] | title }}</h4>
+    <h4 class="info">{{ title(music[current]) }}</h4>
     <table class="player">
       <td>
         <fa
@@ -148,6 +148,7 @@ export default {
         index = this.music.length - 1
       }
       this.current = index
+      document.title = this.title(this.music[index])
       this.audio.src = this.music[index]
       this.audio.load()
       this.audio.play()
@@ -163,13 +164,11 @@ export default {
       if (!isNaN(progress)) {
         this.progress = progress
       }
-    }
-  },
+    },
 
-  filters: {
     title(value) {
       return value ? value.replace('.mp3', '').split('/').slice(-1).join('') : ''
-    },
+    }
   },
 }
 </script>
