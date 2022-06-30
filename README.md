@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ee3895cf-c6e4-46df-9ff9-42a3fc0013cf/deploy-status)](https://app.netlify.com/sites/vuejs-music/deploys)
+
 # vue-music
 
 ## Project setup

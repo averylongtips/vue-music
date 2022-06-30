@@ -1,50 +1,111 @@
 <template>
   <div id="app">
-    <input type="checkbox" id="menu" v-model="menu">
+    <input
+      type="checkbox"
+      id="menu"
+      v-model="menu"
+    >
     <div class="coverImage"></div>
     <div class="bodyPlayer"></div>
     <table class="list">
-      <tr class="song" v-for="(item, index) of music" :key="index" :class="{'active': index === current}" @click="run(index)">
+      <tr
+        class="song"
+        v-for="(item, index) of music"
+        :key="index"
+        :class="{'active': index === current}"
+        @click="run(index)"
+      >
         <td>{{ index + 1 }}</td>
         <td class="title">{{ item  | title }}</td>
       </tr>
     </table>
     <div class="shadow"></div>
-    <progress class="bar" @click="goTo($event)" max="100" :value="progress"></progress>
+    <progress
+      class="bar"
+      @click="goTo($event)"
+      max="100"
+      :value="progress"
+    ></progress>
     <h4 class="info">{{ music[current] | title }}</h4>
     <table class="player">
       <td>
-        <fa class="control" icon="backward" @click="run(current - 1)"></fa>
+        <fa
+          class="control"
+          icon="backward"
+          @click="run(current - 1)"
+        ></fa>
       </td>
       <td>
-        <fa v-if="audio" class="control" :icon="audio.paused ? 'play' : 'stop'" @click="audio.paused ? audio.play() : audio.pause()"></fa>
+        <fa
+          v-if="audio"
+          class="control"
+          :icon="audio.paused ? 'play' : 'stop'"
+          @click="audio.paused ? audio.play() : audio.pause()"
+        ></fa>
       </td>
       <td>
-        <fa class="control" icon="forward" @click="run(current + 1)"></fa>
+        <fa
+          class="control"
+          icon="forward"
+          @click="run(current + 1)"
+        ></fa>
       </td>
     </table>
     <table class="footer">
       <td>
         <input type="checkbox">
-        <fa class="control" icon="undo" @click="run(current)"></fa>
+        <fa
+          class="control"
+          icon="undo"
+          @click="run(current)"
+        ></fa>
       </td>
       <td>
-        <input type="checkbox" v-model="shuffle">
-        <fa :class="{'control': true, 'checked': shuffle}" icon="random" @click="shuffle = !shuffle"></fa>
+        <input
+          type="checkbox"
+          v-model="shuffle"
+        >
+        <fa
+          :class="{'control': true, 'checked': shuffle}"
+          icon="random"
+          @click="shuffle = !shuffle"
+        ></fa>
       </td>
       <td>
-        <input type="checkbox" v-model="repeat">
-        <fa :class="{'control': true, 'checked': repeat}" icon="retweet" @click="repeat = !repeat"></fa>
+        <input
+          type="checkbox"
+          v-model="repeat"
+        >
+        <fa
+          :class="{'control': true, 'checked': repeat}"
+          icon="retweet"
+          @click="repeat = !repeat"
+        ></fa>
       </td>
       <td>
         <input type="checkbox">
-        <fa class="control" icon="bars" @click="menu = !menu"></fa>
+        <fa
+          class="control"
+          icon="bars"
+          @click="menu = !menu"
+        ></fa>
       </td>
     </table>
     <div class="current">
-      <fa class="control" icon="bars" @click="menu = !menu"></fa>
+      <fa
+        class="control"
+        icon="bars"
+        @click="menu = !menu"
+      ></fa>
     </div>
-    <audio id="audio" preload="auto" controls @ended="repeat ? run(current, true) : run(current + 1, true)" @timeupdate="timeupdate()" ref="audio"></audio>
+    <audio
+      id="audio"
+      preload="auto"
+      controls
+      @ended="repeat ? run(current, true) : run(current + 1, true)"
+      @timeupdate="timeupdate()"
+      ref="audio"
+    ></audio>
   </div>
 </template>
 
@@ -53,7 +114,7 @@
 export default {
   name: 'App',
 
-  data () {
+  data() {
     return {
       music: [],
       current: 0,
@@ -65,7 +126,7 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       this.music = Object.keys(process.env)
         .filter(key => key.includes('VUE_APP_MUSIC'))
@@ -76,7 +137,7 @@ export default {
   },
 
   methods: {
-    run (index, auto = false) {
+    run(index, auto = false) {
       if (this.shuffle && auto) {
         index = Math.floor(Math.random() * (this.music.length - 1))
       }
@@ -92,12 +153,12 @@ export default {
       this.audio.play()
     },
 
-    goTo (e) {
+    goTo(e) {
       this.audio.currentTime = this.audio.duration * e.offsetX / e.currentTarget.offsetWidth
       this.timeupdate()
     },
 
-    timeupdate () {
+    timeupdate() {
       let progress = 100 * this.audio.currentTime / this.audio.duration
       if (!isNaN(progress)) {
         this.progress = progress
@@ -106,18 +167,28 @@ export default {
   },
 
   filters: {
-      title(value) {
-        return value ? value.replace('.mp3', '').split('/').slice(-1).join('') : '';
-      },
+    title(value) {
+      return value ? value.replace('.mp3', '').split('/').slice(-1).join('') : ''
+    },
   },
 }
 </script>
 
-<style lang="scss">
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+<style lang="less">
+@color_1: #777;
+@color_2: #fff;
+@color_3: #111111;
+@color_4: #bbb;
+@color_5: #ff564c;
+@color_6: #6d6d6d;
+@font_family_1: "Open Sans";
+@font_family_2: FontAwesome;
+@background_color_1: #000;
+@background_color_2: #5e5e5e;
 
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,400,700";
 body {
-  background: url('./assets/main.jpg') no-repeat center center;
+  background: url("./assets/main.jpg") no-repeat center center;
   background-attachment: fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -125,20 +196,17 @@ body {
   -ms-background-size: cover;
   background-size: cover;
 }
-
 audio {
   visibility: hidden;
 }
-
-input[type=checkbox] {
+input[type="checkbox"] {
   visibility: hidden;
   margin: 0;
   padding: 0;
   z-index: 10;
 }
-
 #app {
-  background-color: #000;
+  background-color: @background_color_1;
   padding: 0;
   height: 650px;
   width: 366px;
@@ -150,14 +218,12 @@ input[type=checkbox] {
   overflow: hidden;
   margin: 30px 0;
 }
-
 .header {
   display: inline-flex;
   margin: 0 0 40px 0;
 }
-
 .coverImage {
-  background: url('./assets/cover.jpg') no-repeat;
+  background: url("./assets/cover.jpg") no-repeat;
   background-size: cover;
   width: 100%;
   height: 366px;
@@ -169,15 +235,69 @@ input[type=checkbox] {
   transform-origin: 0% 0%;
   transition: all 0.3s ease-in;
 }
-
-#menu:checked ~ .coverImage {
-  transform: scale(0.251, 0.251);
-  left: 23px;
-  top: 60px;
-  transition: all 0.3s ease-in;
-  border-radius: 20px;
+#menu {
+  &:checked {
+    & ~ .coverImage {
+      transform: scale(0.251, 0.251);
+      left: 23px;
+      top: 60px;
+      transition: all 0.3s ease-in;
+      border-radius: 20px;
+    }
+    & ~ .bodyPlayer {
+      height: 470px;
+      left: 0;
+      top: 180px;
+      transition: all 0.3s ease-in;
+    }
+    & ~ .list {
+      top: 192px;
+      left: 12px;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1, 1);
+      transition: all 0.3s ease-in;
+    }
+    & ~ table {
+      tr {
+        opacity: 1;
+        animation-delay: 0.3s;
+      }
+    }
+    & ~ .bar {
+      top: 119px;
+      left: 126px;
+      transform: scale(0.6875, 0.6875);
+      transition: all 0.3s ease-in;
+    }
+    & ~ .info {
+      top: 66px;
+      left: 126px;
+      text-align: left;
+      transition: all 0.3s ease-in;
+      h4 {
+        margin-left: 0;
+        font-size: 16px;
+        color: @color_3;
+        transition: all 0.3s ease-in;
+      }
+    }
+    & ~ .player {
+      bottom: 4px;
+      left: -44px;
+      transform: scale(0.45, 0.45);
+      transition: all 0.3s ease-in;
+    }
+    & ~ .footer {
+      bottom: -60px;
+      transition: all 0.3s ease-in;
+    }
+    & ~ .current {
+      bottom: 15px;
+      transition: all 0.3s ease-in;
+    }
+  }
 }
-
 .bodyPlayer {
   position: absolute;
   top: 366px;
@@ -189,14 +309,6 @@ input[type=checkbox] {
   background: #111;
   transition: all 0.3s ease-in;
 }
-
-#menu:checked ~ .bodyPlayer {
-  height: 470px;
-  left: 0;
-  top: 180px;
-  transition: all 0.3s ease-in;
-}
-
 .list {
   border-spacing: 0px 2px;
   width: 342px;
@@ -210,7 +322,7 @@ input[type=checkbox] {
   transition: all 0.3s ease-in;
   font-size: 13px;
   line-height: 13px;
-  font-family: 'Open Sans';
+  font-family: @font_family_1;
   font-weight: 700;
   tr {
     transform-origin: 0% 50%;
@@ -218,34 +330,24 @@ input[type=checkbox] {
     text-align: center;
     background: #1d1d1d;
     text-indent: 8px;
-    color: #777;
+    color: @color_1;
     text-align: left;
-    &:hover, &.active {
+    &:hover {
       background: #222;
       cursor: pointer;
       transition: all 0.11s ease-in;
-      color: #fff;
+      color: @color_2;
     }
   }
-}
-
-#menu:checked ~ {
-  .list {
-    top: 192px;
-    left: 12px;
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1, 1);
-    transition: all 0.3s ease-in;
-  }
-  table tr {
-    opacity: 1;
-    animation-delay: 0.3s;
+  tr.active {
+    background: #222;
+    cursor: pointer;
+    transition: all 0.11s ease-in;
+    color: @color_2;
   }
 }
-
 .bar {
-  background-color: #5E5E5E;
+  background-color: @background_color_2;
   background-repeat: no-repeat;
   background-size: 100%;
   width: 320px;
@@ -257,14 +359,6 @@ input[type=checkbox] {
   transition: all 0.3s ease-in;
   cursor: pointer;
 }
-
-#menu:checked ~ .bar {
-  top: 119px;
-  left: 126px;
-  transform: scale(0.6875, 0.6875);
-  transition: all 0.3s ease-in;
-}
-
 .info {
   width: 157px;
   position: absolute;
@@ -277,29 +371,15 @@ input[type=checkbox] {
   padding: 0;
   font-size: 14px;
   line-height: 14px;
-  font-family: 'Open Sans';
+  font-family: @font_family_1;
   font-weight: 700;
-  color: #fff;
+  color: @color_2;
 }
-
-#menu:checked ~ .info {
-  top: 66px;
-  left: 126px;
-  text-align: left;
-  transition: all 0.3s ease-in;
-  h4 {
-    margin-left: 0;
-    font-size: 16px;
-    color: #111111;
-    transition: all 0.3s ease-in;
-  }
-}
-
 .player {
   background: none;
   text-align: center;
-  font-family: FontAwesome;
-  color: #fff;
+  font-family: @font_family_2;
+  color: @color_2;
   font-size: 26px;
   line-height: 26px;
   width: 216px;
@@ -315,29 +395,19 @@ input[type=checkbox] {
     width: 72px;
   }
 }
-
 .control {
   cursor: pointer;
   transition: all 0.15s linear;
   font-style: normal;
   &:hover {
-    color: #bbb;
+    color: @color_4;
     transition: all 0.15s linear;
   }
 }
-
 .checked {
-  color: #ff564c;
+  color: @color_5;
   transition: all 0.15s linear;
 }
-
-#menu:checked ~ .player {
-  bottom: 4px;
-  left: -44px;
-  transform: scale(0.45, 0.45);
-  transition: all 0.3s ease-in;
-}
-
 .shadow {
   background: rgba(17, 17, 17, 0.8);
   width: 366px;
@@ -347,10 +417,9 @@ input[type=checkbox] {
   left: 0;
   box-shadow: 0px -15px 40px rgba(17, 17, 17, 0.8);
 }
-
 .footer {
   background: none;
-  color: #6d6d6d;
+  color: @color_6;
   font-size: 15px;
   line-height: 15px;
   height: 45px;
@@ -362,22 +431,11 @@ input[type=checkbox] {
   transition: all 0.15s linear;
   transition: bottom 0.3s linear;
 }
-
-#menu:checked ~ .footer {
-  bottom: -60px;
-  transition: all 0.3s ease-in;
-}
-
 .current {
   position: absolute;
   right: 23px;
   bottom: -60px;
   transition: all 0.3s ease-in;
-  color: #fff;
-}
-
-#menu:checked ~ .current {
-  bottom: 15px;
-  transition: all 0.3s ease-in;
+  color: @color_2;
 }
 </style>
